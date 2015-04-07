@@ -21,6 +21,12 @@ public class TimeTracker extends ActionBarActivity {
     TimeTrackerAdapter timeTrackerAdapter;
 
 
+    //y otra para acceder al dbhelper
+
+    private TimeTrackerDatabaseHelper databaseHelper;
+
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -37,6 +43,14 @@ public class TimeTracker extends ActionBarActivity {
         //configurams la listView para usar el Adapter
 
         listView.setAdapter(timeTrackerAdapter);
+
+        //VAMOS A INSTANCIAR NUESTRO OPENHELPER DEL SQL Y ASI SE CREARA LA DATABASE automaticamente!!!
+
+        //TimeTrackerOpenHelper openHelper= new TimeTrackerOpenHelper(this);
+        //ahora lo hacemos conla class dbhelper nueva
+
+        databaseHelper=new TimeTrackerDatabaseHelper(this);
+
 
     }
 
@@ -57,6 +71,12 @@ public class TimeTracker extends ActionBarActivity {
 
                 String notes=data.getStringExtra("notes");
                 String time=data.getStringExtra("time");
+
+
+                //aqui ya podemos huarada en el SQL:
+
+                databaseHelper.saveTimerecord(time,notes);
+
 
                 //Creamos u nevo TimeRecord Object y lo añadimos l arrayList
 

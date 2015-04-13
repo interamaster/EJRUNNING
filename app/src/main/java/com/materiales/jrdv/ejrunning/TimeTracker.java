@@ -73,7 +73,7 @@ public class TimeTracker extends ActionBarActivity {
                 String time=data.getStringExtra("time");
 
 
-                //aqui ya podemos huarada en el SQL:
+                //aqui ya podemos Guardarla en el SQL:
 
                 databaseHelper.saveTimerecord(time,notes);
 
@@ -121,8 +121,8 @@ public class TimeTracker extends ActionBarActivity {
             //Asi no se espera que el intent le devuleva nada:
             //startActivity(intent);
             //si queremos que el intente cuando se acabe la otra activty nos devuuelva algo
-            //se inicia con startActivityForResult y asi nos llmamara al metodo onActivityResult aqui
-            //y ademas nos devolvera algun dato
+            //se inicia con startActivityForResult y asi nos llamara al metodo onActivityResult aqui
+            //y ademas nos devolvera algun dato CUANDO ACABE LA OTRA ACTIVITY LLMADA DESDE AQUI
 
             startActivityForResult(intent,TIME_ENTRY_REQUEST_CODE);
 

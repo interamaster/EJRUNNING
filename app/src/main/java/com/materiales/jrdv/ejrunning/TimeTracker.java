@@ -1,6 +1,7 @@
 package com.materiales.jrdv.ejrunning;
 
 import android.content.Intent;
+import android.database.Cursor;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.Menu;
@@ -20,6 +21,11 @@ public class TimeTracker extends ActionBarActivity {
 
     TimeTrackerAdapter timeTrackerAdapter;
 
+    //y otra del nuevo CURSORADAPTER
+
+    NewTimeTrackerAdapterwithCursorAdapter newTimeTrackerAdapterwithCursorAdapter;
+
+
 
     //y otra para acceder al dbhelper
 
@@ -36,20 +42,46 @@ public class TimeTracker extends ActionBarActivity {
 
         ListView listView=(ListView) findViewById(R.id.times_list);
 
-        //instanciamos el adapter
-
-       timeTrackerAdapter =new TimeTrackerAdapter();
-
-        //configurams la listView para usar el Adapter
-
-        listView.setAdapter(timeTrackerAdapter);
-
         //VAMOS A INSTANCIAR NUESTRO OPENHELPER DEL SQL Y ASI SE CREARA LA DATABASE automaticamente!!!
 
         //TimeTrackerOpenHelper openHelper= new TimeTrackerOpenHelper(this);
         //ahora lo hacemos conla class dbhelper nueva
 
         databaseHelper=new TimeTrackerDatabaseHelper(this);
+
+
+
+
+        //instanciamos el adapter
+
+      // timeTrackerAdapter =new TimeTrackerAdapter();
+
+
+        //lo cambiamos por el nuevo ADAPTER:
+
+        //y   el nuevo CURSORADAPTER se crea con un context(this)
+        // y un cursor que es el que conseguimos con el databaseHelper
+        // de hacer un query a toda la database!!:
+
+
+
+        //mejor con una seguridad:
+
+
+        Cursor cursor=databaseHelper.getAllTImeRecords();
+
+
+        //newTimeTrackerAdapterwithCursorAdapter =new NewTimeTrackerAdapterwithCursorAdapter(this,databaseHelper.getAllTImeRecords());
+
+        newTimeTrackerAdapterwithCursorAdapter =new NewTimeTrackerAdapterwithCursorAdapter(this,cursor);
+        //configurams la listView para usar el Adapter
+
+        //listView.setAdapter(timeTrackerAdapter);
+
+        //CONEL NUEVO:
+
+        listView.setAdapter(newTimeTrackerAdapterwithCursorAdapter);
+
 
 
     }
@@ -78,19 +110,30 @@ public class TimeTracker extends ActionBarActivity {
                 databaseHelper.saveTimerecord(time,notes);
 
 
-                //Creamos u nevo TimeRecord Object y lo añadimos l arrayList
 
-                TimeRecord timeRecordPasadoDelIntent=new TimeRecord(time,notes);
+//
+//
+//                //Creamos u nevo TimeRecord Object y lo añadimos l arrayList
+//
+//                TimeRecord timeRecordPasadoDelIntent=new TimeRecord(time,notes);
+//
+//                //añadimos el nuevo TimeRecord Object al Adapter
+//
+//                timeTrackerAdapter.addTimeRecord(timeRecordPasadoDelIntent);
+//
+//
+//
+//                //con esto actualizamos el ListView:
+//
+//                timeTrackerAdapter.notifyDataSetChanged();
 
-                //añadimos el nuevo TimeRecord Object al Adapter
-
-                timeTrackerAdapter.addTimeRecord(timeRecordPasadoDelIntent);
 
 
+                //AHORA E NVEZ DE ESTO SE HACE UN UPDATE
+                // DEL CURSOR EN EL UPDATER Y EL SOLITO SE ENCARAGARA DE ACTUALZAIRLO!!
 
-                //con esto actualizamos el ListView:
+                newTimeTrackerAdapterwithCursorAdapter.changeCursor(databaseHelper.getAllTImeRecords());
 
-                timeTrackerAdapter.notifyDataSetChanged();
 
             }
         }

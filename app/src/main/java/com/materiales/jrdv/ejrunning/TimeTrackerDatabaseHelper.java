@@ -2,19 +2,21 @@ package com.materiales.jrdv.ejrunning;
 
 import android.content.ContentValues;
 import android.content.Context;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.util.Log;
 
 /**
  * Created by joseramondelgado on 07/04/15.
  */
 public class TimeTrackerDatabaseHelper {
 
-    private static final int DATABASE_VERSION=4;
+    private static final int DATABASE_VERSION=5;
     private static final String DATABASE_NAME="timetracker.db";
     private static final String TABLE_NAME="timerecords";
 
-    public static final String TIMETRACKER_COLUMN_ID="id";
+    public static final String TIMETRACKER_COLUMN_ID="_id";
     public static final String TIMETRACKER_COLUMN_TIME="time";
     public static final String TIMETRACKER_COLUMN_NOTES="notes";
 
@@ -50,6 +52,51 @@ public class TimeTrackerDatabaseHelper {
 
     }
 
+
+    //queryAll:
+
+    public Cursor getAllTImeRecords(){
+
+        // return database.rawQuery("select * from "+TABLE_NAME,null);
+
+        Cursor cursor=database.rawQuery("select * from "+TABLE_NAME,null);
+
+//        if (cursor!=null){
+//
+//            cursor.moveToFirst();
+//
+//        }
+//       return cursor;
+
+        //otra forma
+
+        if (cursor.moveToFirst()){
+
+
+            do {
+
+                String time=cursor.getString(1);
+                String notes =cursor.getString(2);
+
+                Log.d("DB Values: ",time + " "+notes);//esto fiunciona:1625-1625/com.materiales.jrdv.ejrunning D/DB Values:﹕ 33:44 PRIMERA
+
+            } while (cursor.moveToNext());
+
+        }
+
+        cursor.moveToFirst();
+//
+//        if (!cursor.isClosed()){
+//
+//            cursor.close();
+//        }
+
+
+
+
+        return cursor;
+
+    }
 
 
     private class TimeTrackerOpenHelper extends SQLiteOpenHelper {
